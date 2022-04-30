@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "findacat"
+version = "0.1.0"
+description = "Finance helper"
+authors = ["Sherevv <blog@sherevv.ru>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+alembic = "^1.7.7"
+fastapi = "^0.75.2"
+sqlmodel = "^0.0.6"
+asyncpg = "^0.25.0"
+strawberry-graphql = {extras = ["fastapi"], version = "^0.108.0"}
+uvicorn = "^0.17.6"
+ariadne = "^0.15.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
