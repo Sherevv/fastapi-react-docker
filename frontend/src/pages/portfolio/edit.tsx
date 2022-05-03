@@ -2,6 +2,8 @@ import { useForm, Form, Input, Select, Edit, useSelect, RefreshButton, ListButto
 import { IBroker, IPortfolio } from "interfaces";
 import { useParams } from "react-router-dom";
 import { HttpError } from "@pankod/refine-core";
+import { Space } from "antd";
+import React from "react";
 
 export const PortfolioEdit: React.FC = () => {
     //let { action, id } = useParams();
@@ -24,6 +26,8 @@ export const PortfolioEdit: React.FC = () => {
 
     });
 
+    const postData = queryResult?.data?.data;
+
     const { selectProps: brokerSelectProps } = useSelect<IBroker>({
         resource: "brokers",
         metaData:{
@@ -34,15 +38,24 @@ export const PortfolioEdit: React.FC = () => {
         },
         optionLabel: "name",
         optionValue: "id",
-        //defaultValue: queryResult?.data?.data?.broker?.id,
+        defaultValue: postData?.broker?.id
     });
+
+
 
     return (
         <Edit saveButtonProps={saveButtonProps}
-              // pageHeaderProps={{ extra:
-              //     <div>
-              //         <ListButton />
-              //         <RefreshButton onClick={() => queryResult?.refetch()} /></div> }}
+              pageHeaderProps={{ extra:
+                  <Space wrap>
+                      <ListButton />
+                      <RefreshButton
+                          onClick={() =>{
+                              if(postData)  // hack to fire rerender
+                                postData.name=''
+                              queryResult?.refetch()
+                          }}
+                      />
+                  </Space> }}
         >
             <Form {...formProps} layout="vertical"
                   onFinish={(values) =>
@@ -65,4 +78,4 @@ export const PortfolioEdit: React.FC = () => {
             </Form>
         </Edit>
     );
-};
+}
