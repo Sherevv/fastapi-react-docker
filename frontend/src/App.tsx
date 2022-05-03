@@ -5,11 +5,11 @@ import {
     ErrorComponent,
     LoginPage,
 } from "@pankod/refine-antd";
-import "styles/antd.less";
+import "@/styles/antd.less";
 import routerProvider from "@pankod/refine-react-router-v6";
-import dataProvider from "./lib/graphql";
+import dataProvider from "@/lib/graphql";
 import { GraphQLClient } from "graphql-request";
-import { authProvider } from "./authProvider";
+import { authProvider } from "@/authProvider";
 import {
     Title,
     Header,
@@ -17,10 +17,10 @@ import {
     Footer,
     Layout,
     OffLayoutArea,
-} from "components/layout";
+} from "@/components/layout";
 import { useTranslation } from "react-i18next";
-import { PortfolioList, PortfolioShow, PortfolioEdit, PortfolioCreate } from "./pages/portfolio";
-import { BrokerList, BrokerShow, BrokerCreate, BrokerEdit } from "./pages/broker";
+import { PortfolioList, PortfolioShow, PortfolioEdit, PortfolioCreate } from "@/pages/portfolio";
+import { BrokerList, BrokerShow, BrokerCreate, BrokerEdit } from "@/pages/broker";
 
 const API_URL = "http://localhost:8765/graphql";
 const client = new GraphQLClient(API_URL);
@@ -54,19 +54,19 @@ function App() {
             i18nProvider={i18nProvider}
             resources={[
                 {
-                    name: "portfolios",
-                    list: PortfolioList,
-                    show: PortfolioShow,
-                    edit: PortfolioEdit,
-                    create: PortfolioCreate,
-                    canDelete: true,
-                },
-                {
                     name: "brokers",
                     list: BrokerList,
                     show: BrokerShow,
                     edit: BrokerEdit,
                     create: BrokerCreate,
+                    canDelete: true,
+                },
+                {
+                    name: "portfolios",
+                    list: PortfolioList,
+                    show: PortfolioShow,
+                    edit: PortfolioEdit,
+                    create: PortfolioCreate,
                     canDelete: true,
                 },
             ]}
