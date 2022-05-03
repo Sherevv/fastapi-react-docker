@@ -2,7 +2,7 @@ import {
     List,
     Table,
     useTable,
-    useSelect, getDefaultSortOrder, FilterDropdown, Space, EditButton, ShowButton, DeleteButton, Select
+    getDefaultSortOrder, Space, EditButton, ShowButton, DeleteButton
 } from "@pankod/refine-antd";
 
 import { IBroker } from "interfaces";

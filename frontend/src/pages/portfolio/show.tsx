@@ -1,15 +1,12 @@
-import { useShow, useOne, IResourceComponentsProps } from "@pankod/refine-core";
-import { Show, Typography, Tag, RefreshButton } from "@pankod/refine-antd";
+import { useShow, IResourceComponentsProps } from "@pankod/refine-core";
+import { Show, Typography, RefreshButton } from "@pankod/refine-antd";
 
-import { IBroker, IPortfolio } from "interfaces";
-import { useParams } from "react-router-dom";
+import { IPortfolio } from "interfaces";
 
 const { Title, Text } = Typography;
 
 export const PortfolioShow: React.FC<IResourceComponentsProps> = () => {
-    const { action, id } = useParams();
     const { queryResult } = useShow<IPortfolio>({
-        id: id,
         metaData:{
                 fields: [
                     "id",

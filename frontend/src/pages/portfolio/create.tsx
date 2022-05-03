@@ -26,14 +26,7 @@ export const PortfolioCreate = () => {
 
     return (
         <Create saveButtonProps={saveButtonProps}>
-            <Form {...formProps} layout="vertical"
-                  // onFinish={(values) =>
-                  //     formProps.onFinish?.({
-                  //         ...values,
-                  //         broker: values.name,
-                  //     } as any)
-                  // }
-            >
+            <Form {...formProps} layout="vertical">
                 <Form.Item label="Name" name="name"
                            rules={[
                                {

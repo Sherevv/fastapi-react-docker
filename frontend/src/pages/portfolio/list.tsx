@@ -18,86 +18,85 @@ export const PortfolioList: React.FC = () => {
         ],
         initialCurrent: 1,
         initialPageSize: 10,
-        initialFilter: [
-            {
-                operator: "or",
-                value: [
-                    // {
-                    //     field: "name",
-                    //     operator: "contains",
-                    //     value: "s",
-                    // },
-                    // {
-                    //     field: "name",
-                    //     operator: "ncontains",
-                    //     value: "d",
-                    // },
-                    // {
-                    //     field: "name",
-                    //     operator: "containss",
-                    //     value: "s",
-                    // },
-                    // {
-                    //     field: "name",
-                    //     operator: "ncontainss",
-                    //     value: "d",
-                    // },
-                    // {
-                    //     field: "id",
-                    //     operator: "gt",
-                    //     value: 2,
-                    // },
-                    // {
-                    //     field: "id",
-                    //     operator: "gte",
-                    //     value: 2,
-                    // },
-                    // {
-                    //     field: "id",
-                    //     operator: "lt",
-                    //     value: 5,
-                    // },
-                    // {
-                    //     field: "id",
-                    //     operator: "lte",
-                    //     value: 5,
-                    // },
-                    // {
-                    //     field: "id",
-                    //     operator: "between",
-                    //     value: [1,3],
-                    // },
-                    // {
-                    //     field: "id",
-                    //     operator: "nbetween",
-                    //     value: [4,6],
-                    // },
-                    // {
-                    //     field: "id",
-                    //     operator: "null",
-                    //     value: null,
-                    // },
-                    // {
-                    //     field: "id",
-                    //     operator: "nnull",
-                    //     value: null,
-                    // },
-                ],
-
-            },
-            // {
-            //     field: "name",
-            //     operator: "eq",
-            //     value: "s",
-            // }
-        ],
+        // initialFilter: [
+        //     {
+        //         operator: "or",
+        //         value: [
+        //             {
+        //                 field: "name",
+        //                 operator: "contains",
+        //                 value: "s",
+        //             },
+        //             {
+        //                 field: "name",
+        //                 operator: "ncontains",
+        //                 value: "d",
+        //             },
+        //             {
+        //                 field: "name",
+        //                 operator: "containss",
+        //                 value: "s",
+        //             },
+        //             {
+        //                 field: "name",
+        //                 operator: "ncontainss",
+        //                 value: "d",
+        //             },
+        //             {
+        //                 field: "id",
+        //                 operator: "gt",
+        //                 value: 2,
+        //             },
+        //             {
+        //                 field: "id",
+        //                 operator: "gte",
+        //                 value: 2,
+        //             },
+        //             {
+        //                 field: "id",
+        //                 operator: "lt",
+        //                 value: 5,
+        //             },
+        //             {
+        //                 field: "id",
+        //                 operator: "lte",
+        //                 value: 5,
+        //             },
+        //             {
+        //                 field: "id",
+        //                 operator: "between",
+        //                 value: [1,3],
+        //             },
+        //             {
+        //                 field: "id",
+        //                 operator: "nbetween",
+        //                 value: [4,6],
+        //             },
+        //             {
+        //                 field: "id",
+        //                 operator: "null",
+        //                 value: null,
+        //             },
+        //             {
+        //                 field: "id",
+        //                 operator: "nnull",
+        //                 value: null,
+        //             },
+        //         ],
+        //
+        //     },
+        //     {
+        //         field: "name",
+        //         operator: "eq",
+        //         value: "s",
+        //     }
+        // ],
         metaData: {
             fields: [
                 "id",
                 "name",
                 {
                     broker: [
-                        //"id",
                         "name"
                     ],
                 },
@@ -116,13 +115,6 @@ export const PortfolioList: React.FC = () => {
         },
         optionLabel: "name",
         optionValue: "id",
-        // onSearch: (value) => [
-        //     {
-        //         field: "id",
-        //         operator: "eq",
-        //         value,
-        //     },
-        // ],
     });
 
     return (

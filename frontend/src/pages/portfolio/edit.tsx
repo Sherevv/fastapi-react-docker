@@ -1,17 +1,13 @@
 import { useForm, Form, Input, Select, Edit, useSelect, RefreshButton, ListButton } from "@pankod/refine-antd";
 import { IBroker, IPortfolio } from "interfaces";
-import { useParams } from "react-router-dom";
 import { HttpError } from "@pankod/refine-core";
 import { Space } from "antd";
 import React from "react";
 
 export const PortfolioEdit: React.FC = () => {
-    //let { action, id } = useParams();
-    //let idd = id? id : '';
     const { formProps, saveButtonProps, queryResult } = useForm<IPortfolio,
         HttpError,
         IPortfolio>({
-        //id: parseInt(idd),
         metaData:{
             fields: [
                 "id",
@@ -23,7 +19,6 @@ export const PortfolioEdit: React.FC = () => {
                 },
             ],
         },
-
     });
 
     const postData = queryResult?.data?.data;

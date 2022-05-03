@@ -1,16 +1,13 @@
-import { useForm, Form, Input, Select, Edit, useSelect, RefreshButton, ListButton } from "@pankod/refine-antd";
-import { IBroker, IPortfolio } from "interfaces";
-import { useParams } from "react-router-dom";
+import { useForm, Form, Input, Edit, RefreshButton, ListButton } from "@pankod/refine-antd";
+import { IBroker } from "interfaces";
 import { HttpError } from "@pankod/refine-core";
 import { Space } from "antd";
 import React from "react";
 
 export const BrokerEdit: React.FC = () => {
-    //let { action, id } = useParams();
     const { formProps, saveButtonProps, queryResult } = useForm<IBroker,
         HttpError,
         IBroker>({
-        //id: parseInt(idd),
         metaData:{
             fields: [
                 "id",
