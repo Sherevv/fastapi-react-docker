@@ -11,6 +11,13 @@ https://github.com/pankod/refine/blob/master/packages/graphql/src/index.ts
 '''
 
 
+def set_id_to_uuid(ids):
+    if isinstance(ids, str):
+        return UUID(ids)
+    if isinstance(ids, list):
+        return [UUID(id) for id in ids]
+
+
 def get_clause(field: str, _: str, operator: str, value: str | list | None):
     """
     Parse single clause
@@ -21,6 +28,10 @@ def get_clause(field: str, _: str, operator: str, value: str | list | None):
     :return: SQLModel clause
     """
     expression = None
+
+    if field == 'id':
+        value = set_id_to_uuid(value)
+
     if not _:
         expression = literal_column(operator) == value
     elif operator == 'eq':
@@ -36,12 +47,8 @@ def get_clause(field: str, _: str, operator: str, value: str | list | None):
     elif operator == 'gte':
         expression = literal_column(field) >= value
     elif operator == 'in':
-        if field == 'id':
-            value = [UUID(val) for val in value]
         expression = literal_column(field).in_(value)
     elif operator == 'nin':
-        if field == 'id':
-            value = [UUID(val) for val in value]
         expression = literal_column(field).not_in(value)
     elif operator == 'contains':
         expression = literal_column(field).ilike(f'%{value}%')
