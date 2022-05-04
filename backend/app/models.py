@@ -54,7 +54,3 @@ class Broker(SQLModel, table=True):
     portfolios: List["Portfolio"] = Relationship(sa_relationship=RelationshipProperty("Portfolio",
                                                                                       back_populates="broker",
                                                                                       lazy='subquery'))
-
-
-class PortfolioRead(Portfolio):
-    brokerr: Optional["Broker"]

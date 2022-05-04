@@ -7,7 +7,7 @@ from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.db import get_session
-from app.models import Portfolio, Broker, PortfolioRead
+from app.models import Portfolio, Broker
 from app.schema import graphql_app
 
 app = FastAPI(title="FastAPI, Docker and others")
