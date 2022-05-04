@@ -1,3 +1,4 @@
+from random import randint, choice
 from typing import List
 from uuid import UUID
 
@@ -9,6 +10,8 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.db import get_session
 from app.models import Portfolio, Broker
 from app.schema import graphql_app
+
+from app.worker import my_delay_task
 
 app = FastAPI(title="FastAPI, Docker and others")
 app.include_router(graphql_app, prefix="/graphql")
@@ -24,7 +27,16 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World1"}
+    return {"message": "Hello World"}
+
+
+@app.get("/tasks/")
+async def go_task():
+    r = randint(1, 10)
+    heroes = ['Spyder-Man', 'Superman', 'Dr.Strange', 'Moon Knight', 'Wanda', 'Loki']
+    for i in range(r):
+        my_delay_task.delay(choice(heroes), i)
+    return {'task_count': r}
 
 
 @app.get("/portfolio/", response_model=List[Portfolio])

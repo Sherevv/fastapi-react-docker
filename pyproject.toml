@@ -12,7 +12,9 @@ sqlmodel = "^0.0.6"
 asyncpg = "^0.25.0"
 strawberry-graphql = {extras = ["fastapi"], version = "^0.108.0"}
 uvicorn = "^0.17.6"
-ariadne = "^0.15.0"
+celery = "^5.2.6"
+flower = "^1.0.0"
+redis = "^4.2.2"
 
 [tool.poetry.dev-dependencies]
 

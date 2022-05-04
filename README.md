@@ -12,12 +12,17 @@ Backend:
   and [Pydantic](https://pydantic-docs.helpmanual.io)
 - [Strawberry](https://strawberry.rocks) for [GraphQL](https://graphql.org)
 - [Alembic](https://alembic.sqlalchemy.org/en/latest/) for migrations
+- [Celery](https://docs.celeryq.dev/en/stable/) task queue
+- [Flower](https://flower.readthedocs.io/en/latest/) Celery web monitor
+- [RabbitMQ](https://www.rabbitmq.com) message broker
+- [Redis](https://redis.io) for Celery result backend
 
 Frontend:
 - [Nginx](https://nginx.org) web server
 - [React](https://reactjs.org) - a js library for building user interfaces 
 - [Refine](https://refine.dev) react CRUD framework
 - [Ant Design](https://ant.design) UI
+- [Vite](https://vitejs.dev) build tool
 
 Tools: 
 - [Docker](https://www.docker.com) and [docker-compose](https://docs.docker.com/compose/)

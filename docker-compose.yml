@@ -15,10 +15,9 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     networks:
       - postgres
-#    networks:
-#      - db-tier
+
   pgadmin:
-    container_name: pgadmin_container
+    container_name: pgadmin
     image: dpage/pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
@@ -32,7 +31,30 @@ services:
       - postgres
     restart: unless-stopped
 
+  redis:
+    container_name: redis
+    image: redis:7-alpine
+    ports:
+      - 6379:6379
+    networks:
+      - rabbitmq
+
+  rabbitmq3:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    ports:
+      - 15672:15672
+      - 5672:5672
+      - 25676:25676
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    networks:
+      - postgres
+      - rabbitmq
+
   backend:
+    container_name: backend
     build:
       context: .
       target: backend
@@ -44,29 +66,77 @@ services:
       - "./backend:/app"
     environment:
       - DATABASE_URL=postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      - BROKER_URL=pyamqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq3:5672
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
     depends_on:
       - db
+      - rabbitmq3
+      - redis
     networks:
       - postgres
+      - rabbitmq
 
-#    networks:
-#      - back-tier
-#      - db-tier
+  flower:
+    container_name: flower
+    build:
+      context: .
+      target: backend
+    command: celery -A app.worker:celery flower --loglevel=DEBUG
+    ports:
+      - 5556:5555
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      - BROKER_URL=pyamqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq3:5672
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - FLOWER_BROKER_API=http://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq3:15672/api/
+      - FLOWER_DEBUG=True
+    volumes:
+      - "./backend:/app"
+    depends_on:
+      - backend
+      - rabbitmq3
+      - redis
+    networks:
+      - postgres
+      - rabbitmq
+
+  worker:
+    container_name: celery
+    build:
+      context: .
+      target: backend
+    command: celery -A app.worker:celery worker --loglevel=info
+    volumes:
+      - "./backend:/app"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      - BROKER_URL=pyamqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq3:5672
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - backend
+      - rabbitmq3
+      - redis
+    networks:
+      - postgres
+      - rabbitmq
+
 
   frontend_dev:
+    container_name: "frontend_dev"
     build:
       context: .
       target: frontend_dev
     volumes:
       - ./frontend/src:/app/src
       - node_modules:/app/node_modules
+    command: yarn dev
     ports:
-      - 3000:3000
+      - 3001:3001
 #    networks:
 #      - front-tier
-#      - back-tier
     depends_on:
       - backend
+
 
 volumes:
   postgres_data:
@@ -76,10 +146,5 @@ volumes:
 networks:
   postgres:
     driver: bridge
-
-#networks:
-#  front-tier:
-#    external: true
-#    name: host
-#  back-tier:
-#  db-tier:
+  rabbitmq:
+    driver: bridge
