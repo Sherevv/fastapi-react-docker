@@ -21,9 +21,9 @@ import {
 import { useTranslation } from "react-i18next";
 import { PortfolioList, PortfolioShow, PortfolioEdit, PortfolioCreate } from "@/pages/portfolio";
 import { BrokerList, BrokerShow, BrokerCreate, BrokerEdit } from "@/pages/broker";
+import config from '@/./config'
 
-const API_URL = "http://localhost:8765/graphql";
-const client = new GraphQLClient(API_URL);
+const client = new GraphQLClient(config.API_URL);
 const gqlDataProvider = dataProvider(client);
 
 
