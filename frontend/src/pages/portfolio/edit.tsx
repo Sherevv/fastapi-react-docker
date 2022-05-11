@@ -53,12 +53,15 @@ export const PortfolioEdit: React.FC = () => {
                   </Space> }}
         >
             <Form {...formProps} layout="vertical"
-                  onFinish={(values) =>
-                      formProps.onFinish?.({
-                          ...values,
-                          broker: values.broker.id,
-                      } as any)
-                  }>
+                  onFinish={(values) =>{
+                      if (values.broker){
+                          values = {...values,
+                              brokerId: values.broker.id,
+                          } as any;
+                          delete values.broker;
+                      }
+                      formProps.onFinish?.(values);
+                  }}>
                 <Form.Item label="Name" name="name"
                            rules={[
                     {
