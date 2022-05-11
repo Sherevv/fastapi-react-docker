@@ -20,13 +20,14 @@ RUN pip install --upgrade -r requirements.txt
 FROM node:16.14-alpine3.15 as frontend_dev
 
 WORKDIR /app
-COPY ./frontend ./
+COPY ./frontend/package.json ./
+COPY ./frontend/yarn.lock ./
 #ENV CI=1
 #RUN npm install --global yarn
 RUN yarn install
-#
 
-CMD ["npm", "start"]
+COPY ./frontend ./
+#
 #RUN npm run build -- --prod --output-path=/dist
 
 
