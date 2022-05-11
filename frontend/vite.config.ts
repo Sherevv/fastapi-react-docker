@@ -13,7 +13,8 @@ export default defineConfig({
     ]),
   ],
   server: {
-    port: 8001,
+    host: '0.0.0.0',
+    port: 3001,
   },
   resolve: {
     alias: [

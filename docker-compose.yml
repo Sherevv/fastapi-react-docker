@@ -131,7 +131,7 @@ services:
       - /app/node_modules
     command: yarn dev
     ports:
-      - 3001:8001
+      - 3001:3001
 #    networks:
 #      - front-tier
     depends_on:
