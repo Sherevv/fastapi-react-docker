@@ -29,7 +29,7 @@ def get_clause(field: str, _: str, operator: str, value: str | list | None):
     """
     expression = None
 
-    if field == 'id':
+    if field == 'id' or field.endswith('_id'):
         value = set_id_to_uuid(value)
 
     if not _:
