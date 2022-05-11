@@ -2,102 +2,107 @@ from typing import Optional
 from uuid import UUID
 
 import strawberry
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import joinedload, selectinload
 from strawberry.scalars import JSON
-from sqlmodel import select
+from sqlmodel import select, SQLModel
 from app.graphql import prepare_query
 from app.models import Portfolio, Broker
 from app.db import async_session
-from app.types import UpdatePortfolioInput
+from app.types import Portfolio as PortfolioType
 
 
-async def create_portfolio(name: str):
-    item = Portfolio(name=name)
-    async with async_session() as session:
-        session.add(item)
-        await session.commit()
-        await session.refresh(item)
-        return item
+async def update_item(model, input):
+    query = select(model)
+    query = query.where(model.id == input.where.id)
 
-
-async def update_portfolio(input: UpdatePortfolioInput) -> UpdatePortfolioInput:
-    query = select(Portfolio).options(joinedload('*'))
-    query = query.where(Portfolio.id == input.where.id)
     async with async_session() as session:
         result = await session.execute(query)
-        item = result.scalars().one()
-        item.name = input.data.name
-        item.broker_id = input.data.broker.id
+        item = result.scalars().unique().one()
+        for key, value in dict(input.data.__dict__).items():
+            setattr(item, key, value)
+        session.add(item)
+        await session.commit()
+        await session.refresh(item)
+    return item
 
+
+async def delete_item(model, input):
+    query = select(model)
+    query = query.where(model.id == input.where.id)
+    async with async_session() as session:
+        result = await session.execute(query)
+        item = result.scalars().unique().one()
+        await session.delete(item)
+        await session.commit()
+    return item
+
+
+async def create_item(model, input):
+    item = model()
+    for key, value in dict(input.data.__dict__).items():
+        setattr(item, key, value)
+    async with async_session() as session:
         session.add(item)
         await session.commit()
         await session.refresh(item)
         return item
+
+
+async def get_list(
+                    model,
+                    sort: str | None = None,
+                    start: int | None = None,
+                    limit: int | None = None,
+                    where: Optional[JSON] = None
+            ) -> list:
+
+    query = select(model)
+    query = prepare_query(query, sort, start, limit, where)
+
+    async with async_session() as session:
+        result = await session.execute(query)
+        session.expunge_all()
+        items = result.scalars().unique().all()
+
+        return items
+
+
+async def get_by_id(model, id: strawberry.ID):
+    query = select(model)
+    query = query.where(model.id == id)
+
+    async with async_session() as session:
+        result = await session.execute(query)
+        session.expunge_all()
+        item = result.scalars().first()
+
+    return item
 
 
 async def get_portfolio_list(
-                         name: str | None = None,
                          sort: str | None = None,
                          start: int | None = None,
                          limit: int | None = None,
                          where: Optional[JSON] = None
-                         ):
-    query = select(Portfolio).options(joinedload('*'))
-    query = prepare_query(query, sort, start, limit, where)
+                         ) -> list[PortfolioType]:
 
-    if name:
-        query = query.where(Portfolio.name == name)
-
-    async with async_session() as session:
-        result = await session.execute(query)
-        session.expunge_all()
-        items = result.scalars().unique().all()
-
-    return items
+    return await get_list(Portfolio, sort, start, limit, where)
 
 
 async def get_portfolio(id: strawberry.ID):
-    query = select(Portfolio).options(joinedload('*'))
-    #query = prepare_query(query, None, None, None, None)
-    query = query.where(Portfolio.id == id)
-
-    async with async_session() as session:
-        result = await session.execute(query)
-        session.expunge_all()
-        item = result.scalars().first()
-
-    return item
+    return await get_by_id(Portfolio, id)
 
 
 async def get_broker_list(
-        name: str | None = None,
-        sort: str | None = None,
-        start: int | None = None,
-        limit: int | None = None,
-        where: Optional[JSON] = None
-):
-    query = select(Broker)
-    query = prepare_query(query, sort, start, limit, where)
+            sort: str | None = None,
+            start: int | None = None,
+            limit: int | None = None,
+            where: Optional[JSON] = None
+    ):
 
-    if name:
-        query = query.where(Broker.name == name)
-
-    async with async_session() as session:
-        result = await session.execute(query)
-        session.expunge_all()
-        items = result.scalars().unique().all()
-
-    return items
+    return await get_list(Broker, sort, start, limit, where)
 
 
 async def get_broker(id: strawberry.ID):
-    query = select(Broker).options(joinedload('*'))
-    query = query.where(Broker.id == id)
-
-    async with async_session() as session:
-        result = await session.execute(query)
-        session.expunge_all()
-        item = result.scalars().first()
-
-    return item
+    return await get_by_id(Broker, id)
 

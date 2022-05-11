@@ -14,8 +14,8 @@ class Broker:
 class Portfolio:
     id: UUID
     name: str
-    broker: Optional[Broker]
-    broker_id: UUID
+    broker: Broker
+    broker_id: Optional[UUID]
 
 
 @strawberry.input
@@ -26,7 +26,7 @@ class UpdateBrokerPortfolio:
 @strawberry.input
 class UpdatePortfolio:
     name: str
-    broker: Optional[UUID] = None
+    broker_id: UUID
 
 
 @strawberry.input
@@ -58,20 +58,17 @@ class PortfolioOutput2:
 
 @strawberry.type
 class PortfolioOutput:
-    # id: UUID
     portfolio: PortfolioOutput2
 
 
 @strawberry.input
 class CreatePortfolio:
     name: str
-    broker: UpdateBrokerPortfolio
-
+    broker_id: UUID
 
 @strawberry.input
 class CreatePortfolioInput:
     data: CreatePortfolio
-
 
 
 @strawberry.type
