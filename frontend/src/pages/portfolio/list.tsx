@@ -97,6 +97,7 @@ export const PortfolioList: React.FC = () => {
                 "name",
                 {
                     broker: [
+                        'id',
                         "name"
                     ],
                 },
@@ -132,10 +133,7 @@ export const PortfolioList: React.FC = () => {
                     title="Broker"
 
                     filterDropdown={(props) => (
-                        <FilterDropdown {...props}
-                                        mapValue={(selectedKeys) =>
-                                            selectedKeys.map((i) => parseInt(i.toString()))
-                                        }>
+                        <FilterDropdown {...props}>
                             <Select
                                 style={{ minWidth: 200 }}
                                 mode="multiple"
