@@ -5,7 +5,7 @@ import strawberry
 from sqlalchemy.orm import joinedload, selectinload
 from strawberry.scalars import JSON
 from sqlmodel import select, SQLModel
-from app.graphql import prepare_query
+from app.graphql import WhereParser
 from app.models import Portfolio, Broker
 from app.db import async_session
 from app.types import Portfolio as PortfolioType
@@ -57,7 +57,8 @@ async def get_list(
             ) -> list:
 
     query = select(model)
-    query = prepare_query(query, sort, start, limit, where)
+    print(model)
+    query = WhereParser(model, query, sort, start, limit, where).prepare_query()
 
     async with async_session() as session:
         result = await session.execute(query)
