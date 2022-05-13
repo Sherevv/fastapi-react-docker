@@ -22,22 +22,24 @@ FROM node:16.14-alpine3.15 as frontend_dev
 WORKDIR /app
 COPY ./frontend/package.json ./
 COPY ./frontend/yarn.lock ./
-#ENV CI=1
-#RUN npm install --global yarn
+
 RUN yarn install
 
 COPY ./frontend ./
-#
-#RUN npm run build -- --prod --output-path=/dist
+
+RUN yarn build
 
 
 FROM nginx:1.21-alpine as frontend_prod
 
-#RUN rm -rf /usr/share/nginx/html/*
-#COPY --from=frontend_dev /dist /usr/share/nginx/html
-#
-#
-#ENTRYPOINT ["nginx", "-g", "daemon off;"]
+RUN rm -rf /usr/share/nginx/html/*
+RUN rm /etc/nginx/conf.d/default.conf
+COPY ./nginx.conf /etc/nginx/conf.d
+COPY --from=frontend_dev /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
 
 
 

@@ -137,6 +137,16 @@ services:
     depends_on:
       - backend
 
+  frontend_prod:
+    container_name: "frontend_prod"
+    build:
+      context: .
+      target: frontend_prod
+    ports:
+      - 3000:80
+    depends_on:
+      - backend
+      - frontend_dev
 
 volumes:
   postgres_data:
