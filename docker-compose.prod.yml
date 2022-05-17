@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+
+  backend:
+    container_name: backend_prod
+    command: gunicorn app.main:app --workers 2 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:80
+    ports:
+      - 8004:80
+
+  frontend_prod:
+    container_name: "frontend_prod"
+    build:
+      context: .
+      target: frontend_prod
+    ports:
+      - 3000:80
+    depends_on:
+      - backend

@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.8"
 
 services:
   db:
@@ -59,11 +59,6 @@ services:
       context: .
       target: backend
     command: uvicorn app.main:app --host 0.0.0.0 --reload
-    user: "${UID}:${GID}"
-    ports:
-      - "${API_PORT}:8000"
-    volumes:
-      - "./backend:/app"
     environment:
       - DATABASE_URL=postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
       - BROKER_URL=pyamqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq3:5672
@@ -119,34 +114,6 @@ services:
     networks:
       - postgres
       - rabbitmq
-
-
-  frontend_dev:
-    container_name: "frontend_dev"
-    build:
-      context: .
-      target: frontend_dev
-    volumes:
-      - ./frontend/src:/app/src
-      - /app/node_modules
-    command: yarn dev
-    ports:
-      - 3001:3001
-#    networks:
-#      - front-tier
-    depends_on:
-      - backend
-
-  frontend_prod:
-    container_name: "frontend_prod"
-    build:
-      context: .
-      target: frontend_prod
-    ports:
-      - 3000:80
-    depends_on:
-      - backend
-      - frontend_dev
 
 volumes:
   postgres_data:
