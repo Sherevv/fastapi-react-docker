@@ -1,3 +1,12 @@
+########### BACKEND REQUIREMENTS ###################
+FROM python:3.10-slim as requirements-stage
+
+WORKDIR /tmp
+RUN pip install poetry
+COPY ./pyproject.toml ./poetry.lock* /tmp/
+RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
+
+########### BACKEND ###################
 FROM python:3.10-slim as backend
 
 # Set environment varibles
@@ -10,12 +19,10 @@ WORKDIR /app
 
 # install dependencies
 RUN pip install --upgrade pip
-#RUN pip install --upgrade pip poetry
-COPY requirements.txt .
-#COPY poetry.lock pyproject.toml .
-RUN pip install --upgrade -r requirements.txt
-#RUN poetry install
-#RUN pip install uvicorn
+COPY --from=requirements-stage /tmp/requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
+
+COPY ./backend /app
 
 FROM node:16.14-alpine3.15 as frontend_dev
 
