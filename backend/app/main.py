@@ -32,11 +32,11 @@ async def root():
 
 @app.get("/tasks/")
 async def go_task():
-    r = randint(1, 10)
+    count = randint(1, 10)
     heroes = ['Spyder-Man', 'Superman', 'Dr.Strange', 'Moon Knight', 'Wanda', 'Loki']
-    for i in range(r):
+    for i in range(count):
         my_delay_task.delay(choice(heroes), i)
-    return {'task_count': r}
+    return {'task_count': count}
 
 
 @app.get("/portfolio/", response_model=List[Portfolio])
