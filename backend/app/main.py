@@ -42,7 +42,7 @@ async def go_task():
 @app.get("/portfolio/", response_model=List[Portfolio])
 async def read_portfolio(session: AsyncSession = Depends(get_session)):
     result = await session.execute(select(Portfolio))
-    items = result.scalars().all()
+    items = result.scalars().unique().all()
     return items
 
 
@@ -52,7 +52,7 @@ async def read_portfolioo(*,
                           session: AsyncSession = Depends(get_session)):
     result = await session.execute(select(Portfolio).where(Portfolio.id == portfolio_id))
     session.expunge_all()
-    items = result.scalars().all()
+    items = result.scalars().unique().all()
     return items
 
 
@@ -69,7 +69,7 @@ async def create_portfolio(*,
 @app.get("/broker/", response_model=List[Broker])
 async def read_broker(session: AsyncSession = Depends(get_session)):
     result = await session.execute(select(Broker))
-    items = result.scalars().all()
+    items = result.scalars().unique().all()
     return items
 
 
