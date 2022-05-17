@@ -24,6 +24,13 @@ RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
 COPY ./backend /app
 
+########### BACKEND DEBUGGER ###################
+FROM backend as backend_debug
+RUN pip install debugpy
+
+WORKDIR /app
+
+########### FRONTEND DEVELOPMENT ###################
 FROM node:16.14-alpine3.15 as frontend_dev
 
 WORKDIR /app
