@@ -1,10 +1,8 @@
 from typing import Optional
-from uuid import UUID
 
 import strawberry
-from sqlalchemy.orm import joinedload, selectinload
 from strawberry.scalars import JSON
-from sqlmodel import select, SQLModel
+from sqlmodel import select
 from app.graphql import WhereParser
 from app.models import Portfolio, Broker
 from app.db import async_session
@@ -49,16 +47,16 @@ async def create_item(model, input):
 
 
 async def get_list(
-                    model,
-                    sort: str | None = None,
-                    start: int | None = None,
-                    limit: int | None = None,
-                    where: Optional[JSON] = None
-            ) -> list:
+    model,
+    sort: str | None = None,
+    start: int | None = None,
+    limit: int | None = None,
+    where: Optional[JSON] = None
+) -> list:
 
     query = select(model)
-    print(model)
-    query = WhereParser(model, query, sort, start, limit, where).prepare_query()
+    query = WhereParser(model, query, sort, start,
+                        limit, where).prepare_query()
 
     async with async_session() as session:
         result = await session.execute(query)
@@ -81,11 +79,11 @@ async def get_by_id(model, id: strawberry.ID):
 
 
 async def get_portfolio_list(
-                         sort: str | None = None,
-                         start: int | None = None,
-                         limit: int | None = None,
-                         where: Optional[JSON] = None
-                         ) -> list[PortfolioType]:
+    sort: str | None = None,
+    start: int | None = None,
+    limit: int | None = None,
+    where: Optional[JSON] = None
+) -> list[PortfolioType]:
 
     return await get_list(Portfolio, sort, start, limit, where)
 
@@ -95,15 +93,14 @@ async def get_portfolio(id: strawberry.ID):
 
 
 async def get_broker_list(
-            sort: str | None = None,
-            start: int | None = None,
-            limit: int | None = None,
-            where: Optional[JSON] = None
-    ):
+    sort: str | None = None,
+    start: int | None = None,
+    limit: int | None = None,
+    where: Optional[JSON] = None
+):
 
     return await get_list(Broker, sort, start, limit, where)
 
 
 async def get_broker(id: strawberry.ID):
     return await get_by_id(Broker, id)
-

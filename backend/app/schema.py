@@ -1,17 +1,21 @@
 import strawberry
-
-from app.db_request import get_portfolio_list, get_broker_list, get_portfolio, \
-    get_broker, update_item, delete_item, create_item
 from strawberry.fastapi import GraphQLRouter
 
-from app.types import Portfolio, Broker, UpdatePortfolioInput, UpdatePortfolio, DeleteItemInput, DeletePortfolio, \
-    CreatePortfolioInput, PortfolioOutput, UpdateBrokerInput, BrokerOutput, CreateBrokerInput
-from app.models import Portfolio as PortfolioModel, Broker as BrokerModel
+from app.db_request import (create_item, delete_item, get_broker,
+                            get_broker_list, get_portfolio, get_portfolio_list,
+                            update_item)
+from app.models import Broker as BrokerModel
+from app.models import Portfolio as PortfolioModel
+from app.types import (Broker, BrokerOutput, CreateBrokerInput,
+                       CreatePortfolioInput, DeleteItemInput, Portfolio,
+                       PortfolioOutput, UpdateBrokerInput,
+                       UpdatePortfolioInput)
 
 
 @strawberry.type
 class Query:
-    portfolios: list[PortfolioModel] = strawberry.field(resolver=get_portfolio_list)
+    portfolios: list[PortfolioModel] = strawberry.field(
+        resolver=get_portfolio_list)
     portfolio: Portfolio = strawberry.field(resolver=get_portfolio)
     brokers: list[Broker] = strawberry.field(resolver=get_broker_list)
     broker: Broker = strawberry.field(resolver=get_broker)
@@ -53,4 +57,4 @@ schema = strawberry.Schema(
     mutation=Mutation
 )
 
-graphql_app = GraphQLRouter(schema)
+graphql_router = GraphQLRouter(schema)
