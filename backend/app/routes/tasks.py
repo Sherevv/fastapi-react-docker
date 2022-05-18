@@ -7,7 +7,7 @@ from app.worker import my_delay_task
 router = APIRouter()
 
 
-@router.get("/tasks/")
+@router.get("/")
 async def go_task():
     """ Test Celery task
     """
