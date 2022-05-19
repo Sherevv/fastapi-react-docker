@@ -16,7 +16,7 @@ async def update_item(model, input):
     async with async_session() as session:
         result = await session.execute(query)
         item = result.scalars().unique().one()
-        for key, value in dict(input.data.__dict__).items():
+        for key, value in input.data.__dict__.items():
             setattr(item, key, value)
         session.add(item)
         await session.commit()
@@ -37,7 +37,7 @@ async def delete_item(model, input):
 
 async def create_item(model, input):
     item = model()
-    for key, value in dict(input.data.__dict__).items():
+    for key, value in input.data.__dict__.items():
         setattr(item, key, value)
     async with async_session() as session:
         session.add(item)

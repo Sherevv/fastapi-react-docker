@@ -11,7 +11,7 @@ router = APIRouter()
 
 
 @router.get("/", response_model=List[Broker])
-async def read_broker(session: AsyncSession = Depends(get_session)):
+async def get_brokers(session: AsyncSession = Depends(get_session)):
     result = await session.execute(select(Broker))
     items = result.scalars().unique().all()
     return items

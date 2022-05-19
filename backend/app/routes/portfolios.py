@@ -12,19 +12,19 @@ router = APIRouter()
 
 
 @router.get("/", response_model=List[Portfolio])
-async def read_portfolio(session: AsyncSession = Depends(get_session)):
+async def get_portfolios(session: AsyncSession = Depends(get_session)):
     result = await session.execute(select(Portfolio))
     items = result.scalars().unique().all()
     return items
 
 
 @router.get("/{portfolio_id}", response_model=Portfolio)
-async def read_portfolioo(*,
+async def get_portfolio(*,
                           portfolio_id: UUID,
                           session: AsyncSession = Depends(get_session)):
-    result = await session.execute(select(Portfolio).where(Portfolio.id == portfolio_id))
-    session.expunge_all()
-    items = result.scalars().unique().all()
+    query = select(Portfolio).where(Portfolio.id == portfolio_id)
+    result = await session.execute(query)
+    items = result.scalars().unique().one()
     return items
 
 
