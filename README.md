@@ -6,7 +6,8 @@ Database:
 
 Backend:
 - [Python](https://www.python.org/) 3.10
-- [Uvicorn](https://www.uvicorn.org) ASGI web server,
+- [Uvicorn](https://www.uvicorn.org) ASGI web server
+- [Gunicor](https://gunicorn.org) for managment Uvicorn workers
 - [FastAPI](https://fastapi.tiangolo.com) web framework
 - [SQLModel](https://sqlmodel.tiangolo.com) - an ORM, based on [SQLAlchemy](https://www.sqlalchemy.org) 
   and [Pydantic](https://pydantic-docs.helpmanual.io)
@@ -16,6 +17,7 @@ Backend:
 - [Flower](https://flower.readthedocs.io/en/latest/) Celery web monitor
 - [RabbitMQ](https://www.rabbitmq.com) message broker
 - [Redis](https://redis.io) for Celery result backend
+- [Pytest](https://docs.pytest.org) for tests
 
 Frontend:
 - [Nginx](https://nginx.org) web server
